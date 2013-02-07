@@ -1,16 +1,12 @@
-int w = 640;
-int h = 700;
-int topBorder = 60;
-int gridSize = 40;
-int noOfSesnors = 40;
-int noOfPeople = 40;
+int w = 640, h = 700, topBorder = 60, 
+    gridSize = 40, noOfSesnors = 40,  
+    noOfPeople = 40, t = 1;
+
+int[] sensorX = new int[noOfSesnors], sensorY = new int[noOfSesnors], 
+      personX = new int[noOfPeople], personY = new int[noOfPeople];
+
 PImage img;
 PImage[] imgPeople = new PImage[noOfPeople];
-int[] sensorX = new int[noOfSesnors];
-int[] sensorY = new int[noOfSesnors];
-int[] personX = new int[noOfPeople];
-int[] personY = new int[noOfPeople];
-int t = 1;
 
 void setup(){  
   size(w, h);  
@@ -22,7 +18,7 @@ void setup(){
 void setupSensorLocations(){
   for(int s = 0; s < noOfSesnors; s++){
     sensorX[s] = int(random(gridSize, w - gridSize));
-    sensorY[s] = int(random(topBorder + gridSize, h - gridSize)); 
+    sensorY[s] = int(random(gridSize, h - gridSize)); 
   }
 }
 
@@ -34,13 +30,12 @@ void setupPeopleStartingLocation(){
   
   for(int m = 0; m < noOfPeople; m++){    
     personX[m] = int(random(gridSize, w - gridSize));
-    personY[m] = int(random(topBorder + gridSize, h - gridSize));  
+    personY[m] = int(random(gridSize, h - gridSize));  
   }  
 }
 
 void draw(){
-  background(0);
-  drawBorder();
+  background(255);  
   drawGrid();  
   drawRandomSensors();
   drawPeople();  
@@ -51,22 +46,26 @@ void draw(){
   }  
 }
 
+/* Not using this for now, 
+   will add a border for instructions 
+   at the bottom later 
 void drawBorder(){
   rectMode(CORNER);
   strokeWeight(5);
   rect(0, topBorder, 640, h - topBorder);
   strokeWeight(1);  
 }
+*/
 
 void drawGrid(){
   //horizontal lines
-  for(int y = topBorder + gridSize; y <= h; y+=gridSize){
+  for(int y = gridSize; y <= h; y += gridSize){
     line(0, y, w, y);
   }
   
   //vertical lines
   for(int x = 0; x <= w; x+=gridSize){
-    line(x, topBorder, x, h);
+    line(x, 0, x, h);
   }  
 }
 
@@ -80,6 +79,7 @@ void drawRandomSensors(){
 
 void drawPeople(){  
   for(int m = 0; m < noOfPeople; m++){
+    
     int inc = int(random(0, 10));
     
     if(personX[m] + inc > w){
