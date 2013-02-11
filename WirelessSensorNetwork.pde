@@ -1,5 +1,6 @@
 import de.bezier.data.*;
 
+//XlsReader reference
 XlsReader reader;
 
 int w = 400, h = 400,  
