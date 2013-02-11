@@ -2,7 +2,7 @@ import de.bezier.data.*;
 
 XlsReader reader;
 
-int w = 800, h = 800, topBorder = 60, 
+int w = 600, h = 600, topBorder = 60, 
     gridSize = 40, noOfSesnors = 40,  
     noOfPeople = 40, t = 1, 
     noOfAgents = 200, noOfAgentSets = 10, 
@@ -63,7 +63,7 @@ void LoadAgentData(){
     rowindex++;
     
     for(int k = 1; k <= 9; k++){
-      AgentData[i][j][k-1] = Math.floor( reader.getFloat(reader.getRowNum(), k) * 100000 ) / 100000.00000;
+      AgentData[i][j][k-1] = Math.floor( reader.getFloat(reader.getRowNum(), k) * 100000 ) / 100000.0000;
     }
           
     //Suspicious
