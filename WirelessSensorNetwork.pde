@@ -2,10 +2,9 @@ import de.bezier.data.*;
 
 XlsReader reader;
 
-int w = 600, h = 600, topBorder = 60, 
+int w = 400, h = 400,  
     gridSize = 40, noOfSesnors = 40,  
-    noOfPeople = 40, t = 1, 
-    noOfAgents = 200, noOfAgentSets = 10, 
+    t = 1, noOfAgents = 200, noOfAgentSets = 100, 
     noOfAgentProperties = 10;
     
 
@@ -14,22 +13,22 @@ int w = 600, h = 600, topBorder = 60,
 double AgentData[][][] = new double[noOfAgentSets][noOfAgents][noOfAgentProperties];   
 
 int[] sensorX = new int[noOfSesnors], sensorY = new int[noOfSesnors], 
-      personX = new int[noOfPeople], personY = new int[noOfPeople];
+      personX = new int[noOfAgents], personY = new int[noOfAgents];
 
 PImage img;
-PImage[] imgPeople = new PImage[noOfPeople];
+PImage[] imgPeople = new PImage[noOfAgents];
 
 void setup(){  
   
   size(w, h);  
   
-  setupSensorLocations();  
-  setupPeopleStartingLocation();
+  reader = new XlsReader(this, "AgentsData200lap100.xls");
   
-  reader = new XlsReader(this, "AgentsData.xls");
-
   LoadAgentData(); 
-  PrintAgentData();  
+  //PrintAgentData();
+  
+  setupSensorLocations();  
+  setupPeopleStartingLocation();  
 }
 
 void PrintAgentData(){
@@ -40,8 +39,6 @@ void PrintAgentData(){
       }
       println();
     }
-  
-  
 }
 
 //10 sets of 200 Agents data, data points are 
@@ -109,13 +106,15 @@ void setupSensorLocations(){
 */
 void setupPeopleStartingLocation(){
   
-  for(int i = 0; i < noOfPeople; i++){
+  for(int i = 0; i < noOfAgents; i++){
     imgPeople[i] = loadImage("man_walking.png");  
   }
   
-  for(int m = 0; m < noOfPeople; m++){    
-    personX[m] = int(random(gridSize, w - gridSize));
-    personY[m] = int(random(gridSize, h - gridSize));  
+  for(int m = 0; m < noOfAgents; m++){    
+    //AgentData[0:first set of agent data][m:agent no][0:X location]
+    personX[m] = ((Double)AgentData[0][m][0]).intValue(); 
+    //AgentData[0:first set of agent data][m:agent no][1:Y location]
+    personY[m] = ((Double)AgentData[0][m][1]).intValue(); 
   }  
 }
 
@@ -124,26 +123,19 @@ void draw(){
   //Background is set to white
   background(255);  
   
+  delay(1000);
+  
   drawGrid();  
   drawRandomSensors();
   drawPeople();  
   t++;  
   
-  if(t >= 500){
+  if(t >= noOfAgentSets){
     noLoop();
   }  
 }
 
-/* Not using this for now, 
-   will add a border for instructions 
-   at the bottom later 
-void drawBorder(){
-  rectMode(CORNER);
-  strokeWeight(5);
-  rect(0, topBorder, 640, h - topBorder);
-  strokeWeight(1);  
-}
-*/
+
 
 /*
   Grid lines are drawn horizontally and vertically
@@ -179,16 +171,12 @@ void drawRandomSensors(){
 */
 void drawPeople(){  
   
-  for(int m = 0; m < noOfPeople; m++){
+  for(int m = 0; m < noOfAgents; m++){
     
-    int inc = int(random(0, 10));
-    
-    if(personX[m] + inc > w){
-      personX[m] = int(random(gridSize, w - gridSize));
-    }
-    else{
-      personX[m] = personX[m] + inc;
-    }
+    //AgentData[0:first set of agent data][m:agent no][0:X location]
+    personX[m] = ((Double) AgentData[t][m][0]).intValue();
+    //AgentData[0:first set of agent data][m:agent no][1:Y location]
+    personY[m] = ((Double) AgentData[t][m][1]).intValue();
     
     image(imgPeople[m], personX[m], personY[m], 10, 25);    
   }  
