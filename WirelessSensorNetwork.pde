@@ -3,7 +3,7 @@ import de.bezier.data.*;
 //XlsReader reference
 XlsReader reader;
 
-int w = 400, h = 400,  
+int w = 300, h = 300,  
     gridSize = 40, noOfSesnors = 40,  
     t = 1, noOfAgents = 200, noOfAgentSets = 100, 
     noOfAgentProperties = 10;
@@ -23,7 +23,7 @@ void setup(){
   
   size(w, h);  
   
-  reader = new XlsReader(this, "AgentsData200lap100.xls");
+  reader = new XlsReader(this, "200AgentsData100Laps.xls");
   
   LoadAgentData(); 
   //PrintAgentData();
@@ -124,7 +124,7 @@ void draw(){
   //Background is set to white
   background(255);  
   
-  delay(1000);
+  delay(200);
   
   drawGrid();  
   drawRandomSensors();
@@ -158,10 +158,10 @@ void drawGrid(){
   sensors are drawn
 */
 void drawRandomSensors(){
-  img = loadImage("sensor.jpg");    
+  img = loadImage("sensor.png");    
   
   for(int s = 0; s < noOfSesnors; s++){     
-     image(img, sensorX[s], sensorY[s], 25, 10);    
+     image(img, sensorX[s], sensorY[s], 10, 10);    
   }  
 }
 
@@ -178,6 +178,14 @@ void drawPeople(){
     personX[m] = ((Double) AgentData[t][m][0]).intValue();
     //AgentData[0:first set of agent data][m:agent no][1:Y location]
     personY[m] = ((Double) AgentData[t][m][1]).intValue();
+    
+    for(int i = 0; i < t; i++)
+    {
+      line(((Double) AgentData[i][m][0]).intValue(),
+           ((Double) AgentData[i][m][1]).intValue(),
+           ((Double) AgentData[i][m][0]).intValue(),
+           ((Double) AgentData[i][m][1]).intValue());
+    }
     
     image(imgPeople[m], personX[m], personY[m], 10, 25);    
   }  
