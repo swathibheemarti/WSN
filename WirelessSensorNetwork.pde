@@ -3,21 +3,31 @@ import de.bezier.data.*;
 //XlsReader reference
 XlsReader reader;
 
-int w = 300, h = 300,  
-    gridSize = 40, noOfSesnors = 40,  
-    t = 1, noOfAgents = 200, noOfAgentSets = 100, 
-    noOfAgentProperties = 10;
+int w = 300, h = 300,            //Screen Size  
+    gridSize = 40,               //Grid Size
+    noOfSesnors = 40,            //No of Sensors watching agents 
+    t = 1,                       //Time variable
+    noOfAgents = 200,            //No of agents -- this is coming from Matlab
+    noOfAgentSets = 100,         //No of agent Sets (time laps)-- this is coming from Matlab
+    noOfAgentProperties = 10,    //No of agent properties, X, Y, S, D, T, p(x,y), q(s,d), s(p(x,y)), 
+                                 //s(q(s,d)), Suspiciousness
+    noOfStandingAgents = 20;     //No of agents not moving
     
 
 //10 sets of 200 Agents data, data points are 
 //X, Y, S, D, T, p(x,y), q(s,d), s(p(x,y)), s(q(s,d)), Suspiciousness (0 or 1)
 double AgentData[][][] = new double[noOfAgentSets][noOfAgents][noOfAgentProperties];   
 
-int[] sensorX = new int[noOfSesnors], sensorY = new int[noOfSesnors], 
-      personX = new int[noOfAgents], personY = new int[noOfAgents];
+int[] sensorX = new int[noOfSesnors], sensorY = new int[noOfSesnors], //Sensors Location Array
+      personX = new int[noOfAgents], personY = new int[noOfAgents],   //Agents Locations Array
+      standingPersonX = new int[noOfStandingAgents], //Standing Agents Location Array
+      standingPersonY = new int[noOfStandingAgents]; //Standing Agents Location Array
 
 PImage img;
-PImage[] imgPeople = new PImage[noOfAgents];
+PImage[] imgPeople = new PImage[noOfAgents];  //Image for moving agents
+
+PImage[] imgStandingPeople = new PImage[noOfStandingAgents]; //Image for standing agents
+
 
 void setup(){  
   
@@ -109,6 +119,7 @@ void setupPeopleStartingLocation(){
   
   for(int i = 0; i < noOfAgents; i++){
     imgPeople[i] = loadImage("man_walking.png");  
+    
   }
   
   for(int m = 0; m < noOfAgents; m++){    
@@ -116,6 +127,13 @@ void setupPeopleStartingLocation(){
     personX[m] = ((Double)AgentData[0][m][0]).intValue(); 
     //AgentData[0:first set of agent data][m:agent no][1:Y location]
     personY[m] = ((Double)AgentData[0][m][1]).intValue(); 
+  }  
+  
+  //Set up standing peoples initial location randomly
+  for(int j = 0; j < noOfStandingAgents; j++){
+    imgStandingPeople[j] = loadImage("man_walking.png");
+    standingPersonX[j] = int(random(gridSize, w - gridSize));
+    standingPersonY[j] = int(random(gridSize, h - gridSize));
   }  
 }
 
@@ -176,6 +194,7 @@ void drawPeople(){
     
     //AgentData[0:first set of agent data][m:agent no][0:X location]
     personX[m] = ((Double) AgentData[t][m][0]).intValue();
+    
     //AgentData[0:first set of agent data][m:agent no][1:Y location]
     personY[m] = ((Double) AgentData[t][m][1]).intValue();
     
@@ -190,6 +209,10 @@ void drawPeople(){
     image(imgPeople[m], personX[m], personY[m], 10, 25);    
   }  
   
+  //Place standing people
+  for(int j = 0; j < noOfStandingAgents; j++){    
+    image(imgStandingPeople[j], standingPersonX[j], standingPersonY[j], 15, 30);    
+  }   
 }
 
 
